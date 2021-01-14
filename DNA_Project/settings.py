@@ -25,7 +25,7 @@ SECRET_KEY = 'e1ev4x@jv=j8ovx07ec=5j16&xq#5gw-hd^(!5qrjm18a^$scf'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['secret-beach-42738.herokuapp.com']
 
 
 # Application definition
