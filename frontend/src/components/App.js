@@ -53,8 +53,8 @@ class App extends Component {
             <span key={dna.id}>
               <li >
               ID:{dna.id} - Sequence:{dna.sequence} - Timestamp:{dna.checked_at}
-              </li>
               <button onClick={() => { this.handleClick(dna.id) }} className="delete-btn">Delete</button>
+              </li>
             </span>
           );
         })}
