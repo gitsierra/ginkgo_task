@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { render, createPortal } from "react-dom";
-import NameForm from "./NameForm"
+import NameForm from "./NameForm";
 
 class App extends Component {
   constructor(props) {
@@ -8,13 +8,14 @@ class App extends Component {
     this.state = {
       data: [],
       loaded: false,
-      placeholder: "Loading"
+      placeholder: "Loading",
     };
+    this.rerenderParentCallback = this.rerenderParentCallback.bind(this);
   }
 
-  componentDidMount() {
+  rerenderParentCallback() {
     fetch("api/dna")
-      .then(response => {
+      .then((response) => {
         if (response.status > 400) {
           return this.setState(() => {
             return { placeholder: "Something went wrong!" };
@@ -22,44 +23,69 @@ class App extends Component {
         }
         return response.json();
       })
-      .then(data => {
+      .then((data) => {
         this.setState(() => {
           return {
             data,
-            loaded: true
+            loaded: true,
           };
         });
       });
   }
-  handleClick(dnaId){
+
+  componentDidMount() {
+    fetch("api/dna")
+      .then((response) => {
+        if (response.status > 400) {
+          return this.setState(() => {
+            return { placeholder: "Something went wrong!" };
+          });
+        }
+        return response.json();
+      })
+      .then((data) => {
+        this.setState(() => {
+          return {
+            data,
+            loaded: true,
+          };
+        });
+      });
+  }
+  handleClick(dnaId, event) {
     const requestOptions = {
-      method: 'GET'
+      method: "GET",
     };
-  
-    fetch("/api/dna/"+dnaId+"/delete/", requestOptions).then((response) => {
-      console.log(response)
-      return response;
-    }).then((result) => {
-      return
+
+    fetch("/api/dna/" + dnaId + "/delete/", requestOptions).then((response) => {
+      event.target.parentNode.parentNode.removeChild(event.target.parentNode);
     });
   }
   render() {
     return (
-    <div>
-      <NameForm/>
-      <ul>
-        {this.state.data.map(dna => {
-          return (
-            <span key={dna.id}>
-              <li >
-              ID:{dna.id} - Sequence:{dna.sequence} - Timestamp:{dna.checked_at}
-              <button onClick={() => { this.handleClick(dna.id) }} className="delete-btn">Delete</button>
-              </li>
-            </span>
-          );
-        })}
-      </ul>
-    </div>
+      <div>
+        <NameForm rerenderParentCallback={this.rerenderParentCallback} />
+        <ul>
+          {this.state.data.map((dna) => {
+            return (
+              <span key={dna.id}>
+                <li>
+                  Sequence:{dna.sequence} - {dna.matching_partner} - Timestamp:
+                  {dna.checked_at}
+                  <button
+                    onClick={(e) => {
+                      this.handleClick(dna.id, e);
+                    }}
+                    className="delete-btn"
+                  >
+                    Delete
+                  </button>
+                </li>
+              </span>
+            );
+          })}
+        </ul>
+      </div>
     );
   }
 }

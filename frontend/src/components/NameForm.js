@@ -32,7 +32,9 @@ class NameForm extends React.Component {
     })
       .then((response) => response.json())
       .then((data) => {
+        console.log(this.props);
         console.log("Success:", data);
+        this.props.rerenderParentCallback();
       })
       .catch((error) => {
         console.error("Error:", error);
